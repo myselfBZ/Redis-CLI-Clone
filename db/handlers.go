@@ -54,9 +54,11 @@ func Keys(args []string) error {
 }
 
 
-
-
-
-
+func FlushAll(args []string) error {
+    for k := range DB{
+        delete(DB, k)
+    }
+    return nil 
+}
 
 

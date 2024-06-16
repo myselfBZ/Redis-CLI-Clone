@@ -18,6 +18,7 @@ var Commands = map[string]Handler{
     "get": Get,
     "del":Delete,
     "keys":Keys,
+    "flushall":FlushAll,
 }
 
 
