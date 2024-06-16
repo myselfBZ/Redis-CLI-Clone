@@ -35,10 +35,11 @@ func Run(){
         fmt.Print("> ")
         input, err := reader.ReadString('\n') 
         utils.FailOnErr(err, "error reading from a line")
-        input = strings.TrimSpace(input)
+        input = strings.TrimSpace(strings.ToLower(input))
         if input == ""{
             continue
         }
+         
         tokens := strings.Split(input, " ")
         found := false 
         for cmd, fn := range Commands{
