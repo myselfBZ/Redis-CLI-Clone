@@ -14,6 +14,7 @@ var mu sync.Mutex
 type Data struct{
     Prims map[string]interface{}
     Hashes Hashes
+    List List 
 }
 
 func (d Data) Set(key string, v interface{}, expiry int) {

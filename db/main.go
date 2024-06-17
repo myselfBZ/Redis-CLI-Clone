@@ -25,6 +25,8 @@ var Commands = map[string]Handler{
     "hexists":Exists,
     "hdel":Hdel, 
     "setex":Set,
+    "lpush":LPush,
+    "ldisplay":DisplayList,
 }
 
 
@@ -37,6 +39,7 @@ func Run(){
     DB = Data{
         Hashes: make(Hashes),
         Prims: make(map[string]interface{}),
+        List: make(List),
     }
     reader := bufio.NewReader(os.Stdin) 
     for{

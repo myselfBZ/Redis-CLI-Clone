@@ -117,6 +117,28 @@ func Hdel(args []string) error{
 }
 
 
+func DisplayList(args []string) error{
+    if len(args) != 1{
+        return utils.WrongNumberOfArgs
+    }
+    l, ok := DB.List[args[0]]
+    if !ok{
+        return utils.KeyNotFound
+    }
+    fmt.Println(l)
+    return nil 
+}
+
+
+func LPush(args []string) error{
+    if len(args) > 1{
+        DB.List.Push(args[0], args[1:])
+        return nil 
+    }
+    return utils.WrongNumberOfArgs
+}
+
+
 
 
 
