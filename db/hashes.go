@@ -1,42 +1,9 @@
 package db
 
-import (
-	"errors"
-	"fmt"
-
-	"github.com/myselfBZ/mydb/utils"
+import(
+    "github.com/myselfBZ/mydb/utils"
+    "fmt"
 )
-
-type Data struct{
-    Prims map[string]interface{}
-    Hashes Hashes
-}
-
-
-
-func (d Data) Set(key string, v interface{}) {
-    d.Prims[key] = v
-}
-
-func (d Data) Get(key string) (interface{}, error) {
-	v, ok := d.Prims[key]
-	if !ok {
-		return nil, errors.New("key not found")
-	}
-
-    return v, nil 
-}
-
-func (d Data) Delete(keys []string) error{
-    for _, key := range keys{
-        if _, ok := d.Prims[key]; !ok{
-            return utils.KeyNotFound
-        }
-        delete(d.Prims, key)
-    }
-    return nil 
-}
-
 
 type Hashes map[string]map[string]string
 
@@ -70,9 +37,20 @@ func (h Hashes) Get(key, field string) (string, error){
     return v, nil 
 }
 
-
-
-
-
+func (h Hashes) Delete(key string, fields []string) error {
+    m, ok := h[key]
+    if !ok{
+        return utils.KeyNotFound
+    }
+    for _, k := range fields{
+        _, ok := m[k]
+        if !ok{
+            return utils.KeyNotFound
+        }
+        delete(m, k)
+        
+    }
+    return nil 
+}
 
 

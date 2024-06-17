@@ -20,6 +20,10 @@ var Commands = map[string]Handler{
     "keys":Keys,
     "flushall":FlushAll,
     "hmset":HmSet,
+    "hget":GetHashes,
+    "hgetall":HgetAll,
+    "hexists":Exists,
+    "hdel":Hdel, 
 }
 
 

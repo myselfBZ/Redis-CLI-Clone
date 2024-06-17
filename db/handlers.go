@@ -66,7 +66,43 @@ func HmSet(args []string) error{
     return err 
 }
 
+func GetHashes(args []string) error{
+    if len(args) != 2{
+        return utils.WrongNumberOfArgs
+    }
+    v ,err := DB.Hashes.Get(args[0], args[1])
+    if err != nil{
+        return err
+    }
+    fmt.Println(v)
+    return nil 
+}
 
 
+func HgetAll(args []string) error{
+    m, ok := DB.Hashes[args[0]]
+    if !ok{
+        return utils.KeyNotFound
+    }
+    for _, v := range m{
+        fmt.Println(v)
+    }
+    return nil 
+}
+
+func Exists(args []string) error {
+    if len(args) != 2{
+        return utils.WrongNumberOfArgs
+    }
+    _, ok := DB.Hashes[args[0]][args[1]]
+    fmt.Println(ok)
+    return nil  
+}
+
+
+func Hdel(args []string) error{
+    err := DB.Hashes.Delete(args[0], args[1:])
+    return err
+}
 
 
