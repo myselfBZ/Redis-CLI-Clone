@@ -43,22 +43,30 @@ func Get(args []string) error {
 
 func Keys(args []string) error {
     counter := 0
-    if len(DB) == 0{
+    if len(DB.Prims) == 0{
         fmt.Println("DB is empty")
     }
-    for v := range DB{
+    for v := range DB.Prims{
         counter++
-        fmt.Println(counter, ")", v)
+        fmt.Printf("%d) %s\n", counter, v)
     }
     return nil 
 }
 
 
 func FlushAll(args []string) error {
-    for k := range DB{
-        delete(DB, k)
+    for k := range DB.Prims{
+        delete(DB.Prims, k)
     }
     return nil 
 }
+
+func HmSet(args []string) error{
+    err := DB.Hashes.Set(args)
+    return err 
+}
+
+
+
 
 

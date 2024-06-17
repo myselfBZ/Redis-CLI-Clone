@@ -19,6 +19,7 @@ var Commands = map[string]Handler{
     "del":Delete,
     "keys":Keys,
     "flushall":FlushAll,
+    "hmset":HmSet,
 }
 
 
@@ -28,7 +29,9 @@ var DB Data
 
 func Run(){
 
-    DB = Data{}
+    DB = Data{
+        Hashes: make(Hashes),
+    }
     reader := bufio.NewReader(os.Stdin) 
     for{
          
