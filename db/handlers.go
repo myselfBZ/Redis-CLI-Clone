@@ -1,19 +1,30 @@
 package db
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/myselfBZ/mydb/utils"
 )
 
+
+
+
 func Set(args []string) error {
-	if len(args) != 2 {
-		return utils.WrongNumberOfArgs
- 	}
-    
-    DB.Set(args[0], args[1])
-    fmt.Println("OK")
-    return nil 
+    length := len(args)
+    if length == 3{
+        sec, err := strconv.Atoi(args[2])
+        if err != nil{
+            return errors.New("Invalid timeduration")
+        }
+        DB.Set(args[0], args[1], sec)
+        return nil 
+    } else if length == 2{
+        DB.Set(args[0], args[1], 0)
+        return nil 
+    }
+    return utils.WrongNumberOfArgs
 }
 
 func Delete(args []string) error{
@@ -104,5 +115,11 @@ func Hdel(args []string) error{
     err := DB.Hashes.Delete(args[0], args[1:])
     return err
 }
+
+
+
+
+
+
 
 

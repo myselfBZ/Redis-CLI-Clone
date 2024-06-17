@@ -15,6 +15,7 @@ func (h Hashes) Set(keyValue []string) error {
     if lenght % 2 != 1{
         return utils.WrongNumberOfArgs
     }
+    
     h[keyValue[0]] = make(map[string]string)
     for i := 1; i < lenght; i++{
         if isKey{
