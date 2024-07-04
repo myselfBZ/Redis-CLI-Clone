@@ -1,141 +1,133 @@
 package db
 
 import (
-	"errors"
-	"fmt"
+	"encoding/json"
 	"strconv"
 
-	"github.com/myselfBZ/mydb/utils"
 )
 
 
+var wrongPattern = "Wrong pattern"
 
 
-func Set(args []string) error {
+func Set(args []string) string {
     length := len(args)
     if length == 3{
         sec, err := strconv.Atoi(args[2])
         if err != nil{
-            return errors.New("Invalid timeduration")
+            return "Invalid timeduration"
         }
         DB.Set(args[0], args[1], sec)
-        return nil 
+        return "" 
     } else if length == 2{
         DB.Set(args[0], args[1], 0)
-        return nil 
+        return "OK"
     }
-    return utils.WrongNumberOfArgs
+    return "wrong patter"
 }
 
-func Delete(args []string) error{
+func Delete(args []string) string{
     if len(args) == 0{
-        return utils.WrongNumberOfArgs
+        return wrongPattern
     }
     err := DB.Delete(args)
     if err != nil{
-        return err 
+        return err.Error() 
     }
-    fmt.Println("OK")
-    return nil 
+    return "OK" 
 }
 
-func Get(args []string) error {
+func Get(args []string) string {
     if len(args) != 1{
-        return utils.WrongNumberOfArgs
+        return wrongPattern
     }
 
     v, err := DB.Get(args[0])
     if err != nil{
-        return err 
+        return err.Error() 
     }
-    fmt.Println(v)
-    return nil 
+    return v.(string) 
 }
 
-func Keys(args []string) error {
-    counter := 0
+func Keys(args []string) string {
     if len(DB.Prims) == 0{
-        fmt.Println("DB is empty")
+        return "db is empty"
     }
-    for v := range DB.Prims{
-        counter++
-        fmt.Printf("%d) %s\n", counter, v)
-    }
-    return nil 
+    data, _ := json.Marshal(DB.Prims)
+    return string(data) 
 }
 
 
-func FlushAll(args []string) error {
+func FlushAll(args []string) string {
     for k := range DB.Prims{
         delete(DB.Prims, k)
     }
-    return nil 
+    return "OK" 
 }
 
-func HmSet(args []string) error{
+func HmSet(args []string) string{
     err := DB.Hashes.Set(args)
-    return err 
+    return err.Error() 
 }
 
-func GetHashes(args []string) error{
+func GetHashes(args []string) string{
     if len(args) != 2{
-        return utils.WrongNumberOfArgs
+        return wrongPattern
     }
     v ,err := DB.Hashes.Get(args[0], args[1])
     if err != nil{
-        return err
+        return err.Error()
     }
-    fmt.Println(v)
-    return nil 
+    return v
 }
 
 
-func HgetAll(args []string) error{
+func HgetAll(args []string) string{
     m, ok := DB.Hashes[args[0]]
     if !ok{
-        return utils.KeyNotFound
+        return "key not found" 
     }
-    for _, v := range m{
-        fmt.Println(v)
-    }
-    return nil 
+    data, _ := json.Marshal(m)
+    return string(data) 
 }
 
-func Exists(args []string) error {
+func Exists(args []string) string {
     if len(args) != 2{
-        return utils.WrongNumberOfArgs
+        return wrongPattern 
     }
     _, ok := DB.Hashes[args[0]][args[1]]
-    fmt.Println(ok)
-    return nil  
+    if ok{
+        return "true"
+    }  
+    return "false"
 }
 
 
-func Hdel(args []string) error{
+func Hdel(args []string) string{
     err := DB.Hashes.Delete(args[0], args[1:])
-    return err
+    return err.Error()
 }
 
 
-func DisplayList(args []string) error{
+func DisplayList(args []string) string{
     if len(args) != 1{
-        return utils.WrongNumberOfArgs
+        return wrongPattern
     }
     l, ok := DB.List[args[0]]
     if !ok{
-        return utils.KeyNotFound
+        return "not found" 
     }
-    fmt.Println(l)
-    return nil 
+    data, _ := json.Marshal(l)
+    return string(data)
 }
 
 
-func LPush(args []string) error{
+func LPush(args []string) string{
     if len(args) > 1{
         DB.List.Push(args[0], args[1:])
-        return nil 
+        return "OK" 
     }
-    return utils.WrongNumberOfArgs
+    return wrongPattern 
 }
 
 

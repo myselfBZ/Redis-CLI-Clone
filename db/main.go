@@ -7,7 +7,7 @@ import (
 
 )
 
-type Handler func(args []string) error 
+type Handler func(args []string) string 
 
 
 
