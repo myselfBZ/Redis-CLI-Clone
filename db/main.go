@@ -1,12 +1,10 @@
 package db
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"net"
 	"strings"
 
-	"github.com/myselfBZ/mydb/utils"
 )
 
 type Handler func(args []string) error 
@@ -31,42 +29,33 @@ var Commands = map[string]Handler{
 
 
 
-var DB Data
+var DB = &Data{
+    Prims: make(map[string]interface{}),
+    Hashes: make(Hashes),
+    List: make(List),
+}
 
 
-func Run(){
+func Run(command string, conn net.Conn){
 
-    DB = Data{
-        Hashes: make(Hashes),
-        Prims: make(map[string]interface{}),
-        List: make(List),
-    }
-    reader := bufio.NewReader(os.Stdin) 
-    for{
-         
-        fmt.Print("> ")
-        input, err := reader.ReadString('\n') 
-        utils.FailOnErr(err, "error reading from a line")
-        input = strings.TrimSpace(strings.ToLower(input))
-        if input == ""{
-            continue
+
+    command = strings.TrimSpace(strings.ToLower(command))
+
+    tokens := strings.Split(command, " ")
+    found := false 
+    for cmd, fn := range Commands{
+        if cmd == tokens[0]{
+            err := fn(tokens[1:])
+            fmt.Fprintf(conn, "%v\n", err)
+            found = true
         }
-         
-        tokens := strings.Split(input, " ")
-        found := false 
-        for cmd, fn := range Commands{
-            if cmd == tokens[0]{
-                err := fn(tokens[1:])
-                utils.LogErr(err, "")
-                found = true
-            }
 
         }       
         
         if !found{
-            fmt.Println("Command not found")
+            fmt.Fprint(conn, "Command not found")
         }
-    }
+
 }
 
 

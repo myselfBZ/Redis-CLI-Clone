@@ -17,7 +17,7 @@ type Data struct{
     List List 
 }
 
-func (d Data) Set(key string, v interface{}, expiry int) {
+func (d *Data) Set(key string, v interface{}, expiry int) {
     mu.Lock()
     d.Prims[key] = v 
     mu.Unlock()
@@ -33,7 +33,7 @@ func (d Data) Set(key string, v interface{}, expiry int) {
 }
 
 
-func (d Data) Get(key string) (interface{}, error) {
+func (d *Data) Get(key string) (interface{}, error) {
 	v, ok := d.Prims[key]
 	if !ok {
 		return nil, errors.New("key not found")
@@ -42,7 +42,7 @@ func (d Data) Get(key string) (interface{}, error) {
     return v, nil 
 }
 
-func (d Data) Delete(keys []string) error{
+func (d *Data) Delete(keys []string) error{
     for _, key := range keys{
         if _, ok := d.Prims[key]; !ok{
             return utils.KeyNotFound
