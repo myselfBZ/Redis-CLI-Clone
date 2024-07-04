@@ -5,6 +5,8 @@ import(
     "fmt"
 )
 
+// Hash - stores other key-value pairs with a unique key
+
 type Hashes map[string]map[string]string
 
 

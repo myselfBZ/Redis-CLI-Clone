@@ -7,6 +7,8 @@ import (
 
 )
 
+// The brain of the database 
+
 type Handler func(args []string) string 
 
 

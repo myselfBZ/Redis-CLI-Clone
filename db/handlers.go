@@ -7,6 +7,9 @@ import (
 )
 
 
+// Handlers for requests that are coming in from the outside network
+
+// Elegant err messages
 var wrongPattern = "Wrong pattern"
 
 

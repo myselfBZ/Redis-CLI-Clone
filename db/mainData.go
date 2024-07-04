@@ -10,12 +10,15 @@ import (
 
 var mu sync.Mutex
 
+//Basically, this the head of the database where everything is stored. I know naming conventions are just elegant
 
 type Data struct{
     Prims map[string]interface{}
     Hashes Hashes
     List List 
 }
+
+//all the methods for CRUD operations 
 
 func (d *Data) Set(key string, v interface{}, expiry int) {
     mu.Lock()
